@@ -19,6 +19,23 @@
             <i class="ri-lightbulb-line" id="theme-icon"></i>
         </button>
     </div>
+<!-- Navbar -->
+<header class="navbar">
+  <div class="nav-container">
+    <a href="#" class="nav-logo">OpenPlayground</a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#projects">Projects</a>
+      <a href="#contribute">Contribute</a>
+      <a href="https://github.com/YadavAkhileshh/OpenPlayground" target="_blank">GitHub</a>
+    </nav>
+
+    <button class="nav-toggle" id="navToggle">
+      <i class="ri-menu-3-line"></i>
+    </button>
+  </div>
+</header>
+
 
     <!-- Main Section -->
     <section id="projects">
@@ -27,7 +44,7 @@
             <h3><span>Build</span>, Share & Explore</h3>
             <p class="tagline">A community-driven platform where developers showcase their creativity through interactive web projects</p>
             <div class="btn-container">
-                <a href="https://github.com/YadavAkhileshh/OpenPlayground" target="_blank" class="source-code-btn">
+                <a href="https://github.com/YadavAkhileshh/OpenPlayground" target="_blank" rel="noopener noreferrer" class="source-code-btn">
                     View on GitHub
                 </a>
                 <a href="#contribute" class="contribute-btn">
@@ -35,6 +52,15 @@
                 </a>
             </div>
         </div>
+          <!-- Search Projects -->
+          <div class="search-container">
+                 <input 
+                 type="text" 
+                 id="project-search"
+                 placeholder="Search projects..."
+                 aria-label="Search projects"
+               />
+            </div>
 
             <!-- Category Filter -->
             <div class="category-filter">
@@ -158,7 +184,6 @@
                         </div>
                     </div>
                 </a>
-
                 <!-- Digital Clock Project -->
                 <a href="./projects/digital-clock/index.html" class="card" data-category="utility">
                     <div class="card-cover clock-cover">
@@ -177,6 +202,49 @@
                         </div>
                     </div>
                 </a>
+                <!-- Unit Converter Project -->
+                <a href="./projects/Unit-Converter/index.html" class="card" data-category="utility">
+                    <div class="card-cover unit-cover">
+                        <i class="ri-exchange-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header-flex">
+                            <h3 class="card-heading">Unit Converter</h3>
+                            <span class="category-tag">Utility</span>
+                        </div>
+                        <p class="card-description">
+                            Convert length, weight, and temperature units with real-time results.
+                        </p>
+                        <div class="card-tech">
+                            <span>HTML</span>
+                            <span>CSS</span>
+                            <span>JavaScript</span>
+                        </div>
+                    </div>
+                </a>
+
+
+
+
+                <!-- Password Generator Project -->
+                <a href="./projects/Password-Generator/frontend/index.html" class="card" data-category="utility">
+                    <div class="card-cover password-gen-cover">
+                        <i class="ri-key-2-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header-flex">
+                            <h3 class="card-heading">Password Generator</h3>
+                            <span class="category-tag">Utility</span>
+                        </div>
+                        <p class="card-description">Generate secure passwords with customizable length and character options.</p>
+                        <div class="card-tech">
+                            <span>HTML</span>
+                            <span>CSS</span>
+                            <span>JavaScript</span>
+                        </div>
+                    </div>
+                </a>
+                 
                 <!-- Password Strength Checker Project -->
                 <a href="./projects/password-strength-checker/index.html" class="card" data-category="utility">
                     <div class="card-cover password-cover">
@@ -195,18 +263,37 @@
                         </div>
                     </div>
                 </a>
-                <!-- Image Slider Project -->
-                <a href="./projects/image-slider/index.html" class="card" data-category="utility">
-                    <div class="card-cover slider-cover">
-                        <i class="ri-image-line"></i>
+                <!-- Weather App Project -->
+                <a href="./projects/WeatherApp/index.html" class="card" data-category="utility">
+                    <div class="card-cover weather-cover">
+                        <i class="ri-sun-cloudy-line"></i>
                     </div>
                     <div class="card-content">
                         <div class="card-header-flex">
-                            <h3 class="card-heading">Image Slider</h3>
+                            <h3 class="card-heading">Weather App</h3>
+                            <span class="category-tag">Utility</span>
+                        </div>
+                        <p class="card-description">Instant weather dashboard with dark glassmorphism UI and real-time API data.</p>
+                        <div class="card-tech">
+                            <span>HTML</span>
+                            <span>CSS</span>
+                            <span>JS</span>
+                            <span>API</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- EduConnect Website Project -->
+                <a href="./projects/EduConnect/EduConnect/index.html" class="card" data-category="utility">
+                    <div class="card-cover educonnect-cover">
+                        <i class="ri-book-open-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header-flex">
+                            <h3 class="card-heading">EduConnect Website</h3>
                             <span class="category-tag">Utility</span>
                         </div>
                         <p class="card-description">
-                            Smooth image slider with navigation buttons, dots indicator, animations, and local storage support.
+                            Modern education platform UI with responsive design and clean navigation.
                         </p>
                         <div class="card-tech">
                             <span>HTML</span>
@@ -216,8 +303,9 @@
                     </div>
                 </a>
             </div>
-
-        
+            
+            <!-- Pagination Controls -->
+            <div class="pagination-container" id="pagination-controls"></div>
 
         <!-- How to Contribute Section -->
         <div id="contribute" class="contribute-section">
@@ -257,7 +345,7 @@
                     </div>
                 </div>
             </div>
-            <a href="https://github.com/YadavAkhileshh/OpenPlayground#readme" target="_blank" class="source-code-btn">
+            <a href="https://github.com/YadavAkhileshh/OpenPlayground#readme" target="_blank" rel="noopener noreferrer" class="source-code-btn">
                 Read Full Guide
             </a>
         </div>
@@ -267,6 +355,19 @@
     <button id="scrollToTopBtn" title="Go to top">
         <i class="ri-arrow-up-double-fill"></i>
     </button>
+    
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <p>© 2026 OpenPlayground. Built by the community.</p>
+    <div class="footer-links">
+      <a href="#projects">Projects</a>
+      <a href="#contribute">Contribute</a>
+      <a href="https://github.com/YadavAkhileshh/OpenPlayground" target="_blank">GitHub</a>
+    </div>
+  </div>
+</footer>
+
 
     <script src="./js/app.js"></script>
 </body>
