@@ -9,17 +9,657 @@
     <link rel="icon" href="logo.jpg" type="image/png">
     <meta name="description" content="Learn about the mission, team, and contributors behind OpenPlayground.">
 
-    <link rel="stylesheet" href="./css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #7c3aed;
+            --accent-color: #06b6d4;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --card-bg: #ffffff;
+            --border-light: #e5e7eb;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-blur: blur(10px);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #3b82f6;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --card-bg: #1e293b;
+            --border-light: #374151;
+            --glass-bg: rgba(30, 41, 59, 0.8);
+            --gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-top: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .nav-logo i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-icon:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 1.5rem 3rem;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(var(--border-light) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            border-radius: 999px;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .text-gradient {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Sections Common */
+        section {
+            padding: 5rem 1.5rem;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            border-radius: 6px;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        /* Mission Section */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .value-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .value-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .value-card p {
+            color: var(--text-secondary);
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            overflow: hidden;
+            border: 3px solid var(--primary-color);
+        }
+
+        .team-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-role {
+            display: block;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .team-socials {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .team-socials a {
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            transition: color 0.2s ease;
+        }
+
+        .team-socials a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Contributors Section */
+        .contributors-section {
+            background: var(--bg-secondary);
+        }
+
+        .contributors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contributor-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .contributor-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .contributor-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+        }
+
+        .contributor-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .contributor-username {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .contributor-contributions {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .contributor-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s ease;
+        }
+
+        .contributor-link:hover {
+            opacity: 0.9;
+        }
+
+        /* Loading States */
+        .loading-skeleton {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            animation: pulse 1.5s infinite;
+        }
+
+        .skeleton-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--border-light);
+            margin: 0 auto 1rem;
+        }
+
+        .skeleton-text {
+            height: 20px;
+            background: var(--border-light);
+            border-radius: 4px;
+            margin: 0.5rem 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Error States */
+        .contributors-error {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            grid-column: 1 / -1;
+        }
+
+        .error-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Load More Button */
+        .view-all-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 2rem auto 0;
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .view-all-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .contributors-show-more {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        /* Scroll to Top Button */
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: opacity 0.3s ease;
+        }
+
+        #scrollToTopBtn:hover {
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            padding: 3rem 1.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-brand {
+            margin-bottom: 2rem;
+        }
+
+        .footer-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo i {
+            color: var(--primary-color);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-copyright {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--glass-bg);
+                backdrop-filter: var(--glass-blur);
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                border-top: 1px solid var(--border-light);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .values-grid,
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contributors-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        /* Animation Classes */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.6s ease forwards;
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 
 <body>
-
-
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
@@ -28,11 +668,10 @@
                 <span>OpenPlayground</span>
             </a>
 
-            <div class="nav-links">
+            <div class="nav-links" id="navLinks">
                 <a href="index.html#projects" class="nav-link">Explore</a>
-
-                <a href="masthead.html" class="nav-link" style="color: var(--primary);">About</a>
-                <a href="index.html" class="nav-link">Contribute</a>
+                <a href="masthead.html" class="nav-link" style="color: var(--primary-color);">About</a>
+                <a href="index.html#contribute" class="nav-link">Contribute</a>
             </div>
 
             <div class="nav-actions">
@@ -51,9 +690,8 @@
     </nav>
 
     <!-- Masthead Hero -->
-    <header class="hero-section" id="hero" style="min-height: 50vh;">
+    <header class="hero-section" id="hero">
         <div class="hero-bg">
-            <div class="hero-image"></div>
             <div class="hero-overlay"></div>
             <div class="hero-grid"></div>
         </div>
@@ -112,7 +750,6 @@
         </div>
 
         <div class="team-grid">
-            <!-- Admin 1 -->
             <div class="team-card">
                 <div class="team-avatar">
                     <img src="https://github.com/YadavAkhileshh.png" alt="YadavAkhileshh">
@@ -129,7 +766,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Add more admins manually here if needed -->
         </div>
     </section>
 
@@ -141,12 +777,29 @@
             <p class="section-subtitle">The amazing developers who have contributed to OpenPlayground</p>
         </div>
 
-
-        <div class="contributors-grid" id="contributors-grid">
+        <div class="contributors-grid" id="contributorsGrid">
+            <!-- Loading skeletons will be shown here initially -->
             <div class="loading-skeleton">
                 <div class="skeleton-avatar"></div>
                 <div class="skeleton-text"></div>
+                <div class="skeleton-text"></div>
             </div>
+            <div class="loading-skeleton">
+                <div class="skeleton-avatar"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text"></div>
+            </div>
+            <div class="loading-skeleton">
+                <div class="skeleton-avatar"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text"></div>
+            </div>
+        </div>
+
+        <div class="contributors-show-more">
+            <button id="loadMoreContributors" class="view-all-btn" style="display: none;">
+                <i class="ri-user-add-line"></i> Load More Contributors
+            </button>
         </div>
     </section>
 
@@ -175,7 +828,259 @@
         </div>
     </footer>
 
-    <script src="./js/app.js"></script>
+    <script>
+        // Theme Toggle
+        const toggleModeBtn = document.getElementById('toggle-mode-btn');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+
+        // Check for saved theme or prefer-color-scheme
+        const savedTheme = localStorage.getItem('theme') || 
+                          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        html.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        toggleModeBtn.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            themeIcon.className = theme === 'light' ? 'ri-moon-line' : 'ri-sun-line';
+        }
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Scroll to Top Button
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.style.display = 'flex';
+            } else {
+                scrollToTopBtn.style.display = 'none';
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Contributors API
+        const GITHUB_API_URL = 'https://api.github.com/repos/YadavAkhileshh/OpenPlayground/contributors';
+        const CONTRIBUTORS_TO_SHOW = 12;
+
+        async function fetchContributors() {
+            try {
+                const response = await fetch(`${GITHUB_API_URL}?per_page=100`);
+                
+                if (!response.ok) {
+                    throw new Error(`GitHub API error: ${response.status}`);
+                }
+
+                const contributors = await response.json();
+                return contributors;
+            } catch (error) {
+                console.error('Error fetching contributors:', error);
+                showErrorState();
+                return [];
+            }
+        }
+
+        function createContributorCard(contributor) {
+            return `
+                <div class="contributor-card">
+                    <img 
+                        src="${contributor.avatar_url}" 
+                        alt="${contributor.login}'s avatar" 
+                        class="contributor-avatar"
+                        loading="lazy"
+                    >
+                    <div>
+                        <h4 class="contributor-name">${contributor.name || contributor.login}</h4>
+                        <p class="contributor-username">@${contributor.login}</p>
+                    </div>
+                    
+                    <div class="contributor-contributions">
+                        <i class="ri-git-commit-line"></i>
+                        ${contributor.contributions} contributions
+                    </div>
+                    
+                    <a 
+                        href="${contributor.html_url}" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        class="contributor-link"
+                    >
+                        <i class="ri-github-fill"></i> View Profile
+                    </a>
+                </div>
+            `;
+        }
+
+        function displayContributors(contributors) {
+            const contributorsGrid = document.getElementById('contributorsGrid');
+            
+            // Remove loading skeletons
+            contributorsGrid.innerHTML = '';
+            
+            if (contributors.length === 0) {
+                showNoContributors();
+                return;
+            }
+
+            // Filter out bots and limit to CONTRIBUTORS_TO_SHOW
+            const filteredContributors = contributors
+                .filter(contributor => !contributor.login.includes('[bot]'))
+                .slice(0, CONTRIBUTORS_TO_SHOW);
+
+            // Add contributor cards
+            filteredContributors.forEach(contributor => {
+                const cardHTML = createContributorCard(contributor);
+                contributorsGrid.innerHTML += cardHTML;
+            });
+
+            // Show load more button if there are more contributors
+            const humanContributors = contributors.filter(c => !c.login.includes('[bot]'));
+            const loadMoreBtn = document.getElementById('loadMoreContributors');
+            
+            if (humanContributors.length > CONTRIBUTORS_TO_SHOW) {
+                loadMoreBtn.style.display = 'inline-flex';
+            }
+        }
+
+        async function loadMoreContributors() {
+            const allContributors = await fetchContributors();
+            const humanContributors = allContributors.filter(c => !c.login.includes('[bot]'));
+            const contributorsGrid = document.getElementById('contributorsGrid');
+            const loadMoreBtn = document.getElementById('loadMoreContributors');
+            
+            // Show all contributors
+            contributorsGrid.innerHTML = '';
+            humanContributors.forEach(contributor => {
+                const cardHTML = createContributorCard(contributor);
+                contributorsGrid.innerHTML += cardHTML;
+            });
+            
+            // Hide the load more button after clicking
+            loadMoreBtn.style.display = 'none';
+        }
+
+        function showErrorState() {
+            const contributorsGrid = document.getElementById('contributorsGrid');
+            const loadMoreBtn = document.getElementById('loadMoreContributors');
+            
+            contributorsGrid.innerHTML = `
+                <div class="contributors-error">
+                    <div class="error-icon">😕</div>
+                    <h3>Unable to load contributors</h3>
+                    <p>Please check your internet connection or try again later.</p>
+                </div>
+            `;
+            loadMoreBtn.style.display = 'none';
+        }
+
+        function showNoContributors() {
+            const contributorsGrid = document.getElementById('contributorsGrid');
+            const loadMoreBtn = document.getElementById('loadMoreContributors');
+            
+            contributorsGrid.innerHTML = `
+                <div class="contributors-error">
+                    <div class="error-icon">👤</div>
+                    <h3>No contributors found</h3>
+                    <p>Be the first to contribute to this project!</p>
+                </div>
+            `;
+            loadMoreBtn.style.display = 'none';
+        }
+
+        // Initialize contributors
+        async function initContributors() {
+            const contributors = await fetchContributors();
+            displayContributors(contributors);
+        }
+
+        // Event Listeners
+        document.getElementById('loadMoreContributors').addEventListener('click', loadMoreContributors);
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Scroll to top on page load
+            window.scrollTo(0, 0);
+            
+            // Initialize contributors
+            initContributors();
+            
+            // Trigger animations
+            const fadeElements = document.querySelectorAll('.fade-up');
+            fadeElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const navbarHeight = 70;
+                    const targetPosition = targetElement.offsetTop - navbarHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeUp 0.6s ease forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-up elements
+        document.querySelectorAll('.fade-up').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
 </body>
 
 </html>
