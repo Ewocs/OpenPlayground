@@ -248,3 +248,234 @@ button:hover {
   background: #ef4444;
   color: white;
 }
+/* =========================
+   TABLETS (≤ 1024px)
+========================= */
+@media (max-width: 1024px) {
+
+  .container {
+    flex-direction: column;
+    padding: 25px;
+  }
+
+  .instructions,
+  .game-area {
+    width: 100%;
+  }
+
+  .instructions {
+    margin-bottom: 20px;
+  }
+
+  .stats {
+    gap: 25px;
+  }
+
+  .card {
+    width: 80px;
+    height: 80px;
+    font-size: 28px;
+  }
+}
+
+/* =========================
+   MOBILE (≤ 768px)
+========================= */
+@media (max-width: 768px) {
+
+  .container {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .instructions {
+    padding: 20px;
+    font-size: 14px;
+  }
+
+  .game-area {
+    padding: 25px 20px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .stats {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .stats div {
+    padding: 10px 14px;
+  }
+
+  .board {
+    gap: 14px;
+  }
+
+  .card {
+    width: 70px;
+    height: 70px;
+    font-size: 24px;
+    border-radius: 16px;
+  }
+
+  button {
+    padding: 12px 22px;
+    font-size: 15px;
+  }
+
+  .modal-content {
+    width: 90%;
+    padding: 26px;
+  }
+}
+
+/* =========================
+   SMALL MOBILE (≤ 480px)
+========================= */
+@media (max-width: 480px) {
+
+  .instructions {
+    display: none; /* hide instructions for very small screens */
+  }
+
+  .container {
+    padding: 15px;
+  }
+
+  .game-area {
+    padding: 20px 15px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  #status {
+    font-size: 14px;
+  }
+
+  .stats span {
+    font-size: 16px;
+  }
+
+  .card {
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+    border-radius: 14px;
+  }
+
+  .board {
+    gap: 12px;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+
+  .modal-buttons button {
+    width: 100%;
+  }
+}
+/* =========================
+   MOBILE UI FIX (FINAL)
+========================= */
+@media (max-width: 768px) {
+
+  body {
+    background: linear-gradient(#eaf6ff, #f8fafc);
+  }
+
+  .container {
+    padding: 16px;
+    gap: 16px;
+    min-height: auto;
+  }
+
+  /* Stack nicely */
+  .instructions,
+  .game-area {
+    width: 100%;
+    border-radius: 18px;
+  }
+
+  /* Reduce extra height */
+  .game-area {
+    padding: 22px 16px;
+  }
+
+  /* Center game better */
+  .board-wrapper {
+    margin: 20px 0 12px;
+  }
+
+  /* Cards slightly bigger on mobile */
+  .card {
+    width: 72px;
+    height: 72px;
+    font-size: 24px;
+    border-radius: 16px;
+  }
+
+  /* Stats compact */
+  .stats {
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .stats div {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  /* Button centered & clean */
+  button {
+    width: 70%;
+    margin: 10px auto 0;
+    display: block;
+  }
+}
+
+/* =========================
+   SMALL MOBILE (≤480px)
+========================= */
+@media (max-width: 480px) {
+
+  /* Hide instructions completely */
+  .instructions {
+    display: none;
+  }
+
+  .container {
+    padding: 12px;
+  }
+
+  .game-area {
+    padding: 18px 14px;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+
+  #status {
+    font-size: 13px;
+  }
+
+  .card {
+    width: 64px;
+    height: 64px;
+    font-size: 20px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
