@@ -1,997 +1,471 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpenPlayground - Build, Share, Explore</title>
+    <link rel="icon" href="logo.jpg" type="image/x-icon">
+    <link rel="icon" href="logo.jpg" type="image/png">
+    <meta name="description"
+        content="A community-driven platform where developers showcase their creativity through interactive web projects">
 
-    <link rel="stylesheet" href="./css/style.css">
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
 
+    <!-- Styles -->
+    <link rel="stylesheet" href="./css/responsive.css">
+    <link rel="stylesheet" href="./css/style.css">
 
-    <style>
-        .pagination-container {
-          display: flex;
-          justify-content: center;
-          gap: 10px;
-          margin: 40px 0;
-          flex-wrap: wrap;
-        }
-      
-        .pagination-container button {
-          padding: 8px 14px;
-          border-radius: 8px;
-          border: 1px solid #ddd;
-          background: white;
-          cursor: pointer;
-          font-weight: 500;
-          transition: all 0.2s ease;
-        }
-      
-        .pagination-container button.active {
-          background: #2563eb;
-          color: white;
-          border-color: #2563eb;
-        }
-      
-        .pagination-container button:hover {
-          background: #e5e7eb;
-        }
-      
-        .card.hidden {
-          display: none !important;
-        }
-      </style>
-      
+    <!-- Preload critical components -->
+    <link rel="preload" href="./components/header.html" as="fetch" crossorigin>
+    <link rel="preload" href="./components/hero.html" as="fetch" crossorigin>
 </head>
 
 <body>
+    <!-- Header Component Placeholder -->
+    <div id="header-placeholder"></div>
 
-<!-- Theme Toggle -->
-<div class="icon">
-    <button id="toggle-mode-btn" aria-label="Toggle theme">
-        <i class="ri-lightbulb-line" id="theme-icon"></i>
+    <!-- Hero Component Placeholder -->
+    <div id="hero-placeholder"></div>
+
+    <!-- Projects Component Placeholder -->
+    <div id="projects-placeholder"></div>
+
+    <!-- Contribute Component Placeholder -->
+    <div id="contribute-placeholder"></div>
+
+    <!-- Contributors Component Placeholder -->
+    <div id="contributors-placeholder"></div>
+
+    <!-- Footer Component Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Chatbot Component Placeholder -->
+    <div id="chatbot-placeholder"></div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" aria-label="Scroll to top">
+        <i class="ri-arrow-up-line"></i>
     </button>
-</div>
 
-<!-- Navbar -->
-<header class="navbar">
-    <div class="nav-container">
-        <a href="#" class="nav-logo">OpenPlayground</a>
+    <!-- Scripts -->
+    <script src="./js/components.js"></script>
+    <script src="./js/app.js"></script>
+    <script src="./js/chatbot.js"></script>
 
-        <nav class="nav-links" id="navLinks">
-            <a href="#projects">Projects</a>
-            <a href="#contribute">Contribute</a>
-            <a href="https://github.com/YadavAkhileshh/OpenPlayground" target="_blank">GitHub</a>
-        </nav>
+    <!-- Contributors Script -->
+    <script>
+        // GitHub API Configuration
+        const GITHUB_API_URL = 'https://api.github.com/repos/YadavAkhileshh/OpenPlayground/contributors';
+        const CONTRIBUTORS_TO_SHOW = 12;
 
-        <button class="nav-toggle" id="navToggle">
-            <i class="ri-menu-3-line"></i>
-        </button>
-    </div>
-</header>
+        // Fetch contributors from GitHub API
+        async function fetchContributors() {
+            const contributorsGrid = document.getElementById('contributors-grid');
+            const loadMoreBtn = document.getElementById('loadMoreContributors');
+            
+            if (!contributorsGrid) return;
 
-<section id="projects">
+            try {
+                const response = await fetch(`${GITHUB_API_URL}?per_page=100`);
 
-    <!-- Hero -->
-    <div class="projects-heading">
-        <p>OpenPlayground</p>
-        <h3><span>Build</span>, Share & Explore</h3>
-        <p class="tagline">
-            A community-driven platform where developers showcase their creativity through interactive web projects
-        </p>
+                if (!response.ok) {
+                    throw new Error(`GitHub API error: ${response.status}`);
+                }
 
-        <div class="btn-container">
-            <a href="https://github.com/YadavAkhileshh/OpenPlayground" target="_blank" class="source-code-btn">
-                View on GitHub
-            </a>
-            <a href="#contribute" class="contribute-btn">
-                Contribute
-            </a>
-        </div>
-    </div>
+                const contributors = await response.json();
+                displayContributors(contributors);
+            } catch (error) {
+                console.error('Error fetching contributors:', error);
+                showErrorState();
+            }
+        }
 
-    <!-- Search + Sort -->
-    <div class="search-sort-wrapper">
-        <div class="search-container">
-            <input type="text" id="project-search" placeholder="Search projects..." />
-        </div>
+        // Create contributor card HTML
+        function createContributorCard(contributor) {
+            const role = getRole(contributor);
+            
+            return `
+                <div class="contributor-card"
+                     data-role="${role}"
+                     data-name="${contributor.login.toLowerCase()}"
+                     data-date="${contributor.id}">
+                     
+                    <img src="${contributor.avatar_url}" class="contributor-avatar" loading="lazy" alt="${contributor.login}">
+                    <h4 class="contributor-name">${contributor.login}</h4>
+                    
+                    <span class="contributor-badge ${role}">
+                        ${role === 'developer' ? 'DEVELOPER' : 'CONTRIBUTOR'}
+                    </span>
 
-        <div class="sort-container">
-            <select id="project-sort">
-                <option value="default">Default</option>
-                <option value="az">A → Z</option>
-                <option value="za">Z → A</option>
-                <option value="newest">Newest Added</option>
-                <option value="oldest">Oldest Added</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Category Filter -->
-    <div class="category-filter">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="action">Action</button>
-        <button class="filter-btn" data-filter="strategy">Strategy</button>
-        <button class="filter-btn" data-filter="puzzle">Puzzle</button>
-        <button class="filter-btn" data-filter="utility">Utility</button>
-    </div>
-
-    <!-- Projects Grid -->
-    <div class="projects-container">
-
-        <!-- Color Palette Generator -->
-        <a href="./projects/color-palette-generator/index.html" class="card" data-category="utility">
-            <div class="card-cover palette-cover"><i class="ri-palette-line"></i></div>
-            <div class="card-content">
-                <div class="card-header-flex">
-                    <h3 class="card-heading">Color Palette Generator</h3>
-                    <span class="category-tag">Utility</span>
+                    <a href="${contributor.html_url}" target="_blank" class="contributor-link">
+                        <i class="ri-github-fill"></i> Profile
+                    </a>
                 </div>
-                <p class="card-description">Generate beautiful random color palettes.</p>
-                <div class="card-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
-            </div>
-        </a>
+            `;
+        }
 
-        <!-- Infinite Runner -->
-        <a href="./projects/InfiniteParallaxRunner/index.html" class="card" data-category="action">
-            <div class="card-cover runner-cover"><i class="ri-gamepad-line"></i></div>
-            <div class="card-content">
-                <div class="card-header-flex">
-                    <h3 class="card-heading">Infinite Runner</h3>
-                    <span class="category-tag">Action</span>
+        function getRole(contributor) {
+            return contributor.contributions >= 50 ? "developer" : "contributor";
+        }
+
+        // Display contributors in the grid
+        function displayContributors(contributors) {
+            const contributorsGrid = document.getElementById('contributors-grid');
+            const loadMoreBtn = document.getElementById('loadMoreContributors');
+            
+            if (!contributorsGrid) return;
+
+            contributorsGrid.innerHTML = '';
+
+            if (contributors.length === 0) {
+                showNoContributors();
+                return;
+            }
+
+            // Filter out bots and limit to CONTRIBUTORS_TO_SHOW
+            const filteredContributors = contributors
+                .filter(contributor => !contributor.login.includes('[bot]'))
+                .slice(0, CONTRIBUTORS_TO_SHOW);
+
+            // Add contributor cards
+            filteredContributors.forEach((contributor, index) => {
+                const cardHTML = createContributorCard(contributor);
+                contributorsGrid.innerHTML += cardHTML;
+            });
+
+            // Show load more button if there are more contributors
+            const humanContributors = contributors.filter(c => !c.login.includes('[bot]'));
+            if (humanContributors.length > CONTRIBUTORS_TO_SHOW && loadMoreBtn) {
+                loadMoreBtn.style.display = 'inline-flex';
+                
+                loadMoreBtn.addEventListener('click', async () => {
+                    const allContributors = await fetch(`${GITHUB_API_URL}?per_page=100`).then(r => r.json());
+                    const humanContributors = allContributors.filter(c => !c.login.includes('[bot]'));
+
+                    contributorsGrid.innerHTML = '';
+                    humanContributors.forEach(contributor => {
+                        const cardHTML = createContributorCard(contributor);
+                        contributorsGrid.innerHTML += cardHTML;
+                    });
+
+                    loadMoreBtn.style.display = 'none';
+                });
+            }
+        }
+
+        // Show error state
+        function showErrorState() {
+            const contributorsGrid = document.getElementById('contributors-grid');
+            if (!contributorsGrid) return;
+            
+            contributorsGrid.innerHTML = `
+                <div class="contributors-error">
+                    <div class="error-icon">😕</div>
+                    <h3>Unable to load contributors</h3>
+                    <p>Please check your internet connection or try again later.</p>
                 </div>
-                <p class="card-description">Procedural neon runner with parallax.</p>
-                <div class="card-tech"><span>HTML</span><span>Canvas</span><span>JS</span></div>
-            </div>
-        </a>
+            `;
+        }
 
-        <!-- Calculator -->
-        <a href="./projects/calculator/index.html" class="card" data-category="utility">
-            <div class="card-cover calculator-cover"><i class="ri-calculator-line"></i></div>
-            <div class="card-content">
-                <div class="card-header-flex">
-                    <h3 class="card-heading">Calculator</h3>
-                    <span class="category-tag">Utility</span>
+        // Show no contributors state
+        function showNoContributors() {
+            const contributorsGrid = document.getElementById('contributors-grid');
+            if (!contributorsGrid) return;
+            
+            contributorsGrid.innerHTML = `
+                <div class="contributors-error">
+                    <div class="error-icon">👤</div>
+                    <h3>No contributors found</h3>
+                    <p>Be the first to contribute to this project!</p>
                 </div>
-                <p class="card-description">Basic arithmetic calculator.</p>
-                <div class="card-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
-            </div>
-        </a>
-
-        <!-- Quiz Game -->
-        <a href="./projects/quiz-game/index.html" class="card" data-category="puzzle">
-            <div class="card-cover quiz-cover"><i class="ri-question-line"></i></div>
-            <div class="card-content">
-                <div class="card-header-flex">
-                    <h3 class="card-heading">Quiz Game</h3>
-                    <span class="category-tag">Puzzle</span>
-                </div>
-                <p class="card-description">MCQ quiz with timer.</p>
-                <div class="card-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
-            </div>
-        </a>
-
-        <!-- Weather App -->
-        <a href="./projects/WeatherApp/index.html" class="card" data-category="utility">
-            <div class="card-cover weather-cover"><i class="ri-sun-cloudy-line"></i></div>
-            <div class="card-content">
-                <div class="card-header-flex">
-                    <h3 class="card-heading">Weather App</h3>
-                    <span class="category-tag">Utility</span>
-                </div>
-                <p class="card-description">Glassmorphism weather dashboard.</p>
-                <div class="card-tech"><span>HTML</span><span>CSS</span><span>JS</span><span>API</span></div>
-            </div>
-        </a>
-
-        <!-- Pomodoro -->
-        <a href="./projects/PomodoroTimer/index.html" class="card" data-category="utility">
-            <div class="card-cover" style="background:#4f46e5;display:flex;align-items:center;justify-content:center">
-                <i class="ri-timer-flash-line" style="font-size:3rem;color:white"></i>
-            </div>
-            <div class="card-content">
-                <div class="card-header-flex">
-                    <h3 class="card-heading">Pomodoro Timer</h3>
-                    <span class="category-tag">Utility</span>
-                </div>
-                <p class="card-description">Work & break productivity timer.</p>
-                <div class="card-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
-            </div>
-        </a>
-
-        <!-- International Currency Converter -->
-    <a href="./projects/currency-converter/index.html"
-    class="card"
-    data-category="utility">
-
-    <div class="card-cover currency-cover" style="background:#efa7a7;display:flex;align-items:center;justify-content:center">
-    <i class="ri-exchange-dollar-line"></i>
-    </div>
-
-    <div class="card-content">
-    <div class="card-header-flex">
-    <h3 class="card-heading">Currency Converter</h3>
-    <span class="category-tag">Utility</span>
-    </div>
-
-    <p class="card-description">
-    Convert international currencies in real time with a clean and minimal interface.
-    </p>
-
-    <div class="card-tech">
-    <span>HTML</span>
-    <span>CSS</span>
-    <span>JavaScript</span>
-    <span>API</span>
-    </div>
-    </div>
-    </a>
-    
-    
-    <!-- random joke generator -->
-    <a href="./projects/random-joke-generator/index.html"
-   class="card"
-   data-category="fun">
-
-  <div class="card-cover joke-cover"
-       style="background:#a5b4fc;display:flex;align-items:center;justify-content:center">
-    <i class="ri-emotion-laugh-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Random Joke Generator</h3>
-      <span class="category-tag">Fun</span>
-    </div>
-
-    <p class="card-description">
-      Instantly generates random jokes for a quick laugh using a clean and minimal interface.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-      <span>API</span>
-    </div>
-  </div>
-
-</a>
-
-
-
-<!-- random dice generator -->
-<a href="./projects/random-dice-generator/index.html"
-   class="card"
-   data-category="fun">
-
-  <div class="card-cover dice-cover"
-       style="background:#fde68a;display:flex;align-items:center;justify-content:center">
-    <i class="ri-dice-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Random Dice Number Generator</h3>
-      <span class="category-tag">Fun</span>
-    </div>
-
-    <p class="card-description">
-      Generates a random dice roll between 1 and 6 with a single click, perfect for games,
-      decisions, or settling arguments fairly.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-
- <!-- chat app -->
-<a href="./projects/chat-app/index.html"
-   class="card"
-   data-category="communication">
-
-  <div class="card-cover chat-cover"
-       style="background:#a7f3d0;display:flex;align-items:center;justify-content:center">
-    <i class="ri-chat-3-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Real-Time Chat App</h3>
-      <span class="category-tag">Communication</span>
-    </div>
-
-    <p class="card-description">
-      A simple real-time chat application that lets users send and receive messages instantly
-      with a clean, responsive interface.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-<!-- captcha generator -->
-<a href="./projects/captcha-generator/index.html"
-   class="card"
-   data-category="security">
-
-  <div class="card-cover captcha-cover"
-       style="background:#c7d2fe;display:flex;align-items:center;justify-content:center">
-    <i class="ri-shield-keyhole-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Captcha Generator</h3>
-      <span class="category-tag">Security</span>
-    </div>
-
-    <p class="card-description">
-      Generates random CAPTCHA challenges to prevent bot access and verify human users
-      using a simple, lightweight interface.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-<!-- unit convertor -->
-<a href="./projects/unit-converter/index.html"
-   class="card"
-   data-category="utility">
-
-  <div class="card-cover unit-cover"
-       style="background:#bbf7d0;display:flex;align-items:center;justify-content:center">
-    <i class="ri-scales-3-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Unit Converter</h3>
-      <span class="category-tag">Utility</span>
-    </div>
-
-    <p class="card-description">
-      Converts common units like length, weight, temperature, and time instantly
-      with a clean, intuitive interface.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-<!-- typing speed test -->
-<a href="./projects/typing-speed-test/index.html"
-   class="card"
-   data-category="utility">
-
-  <div class="card-cover typing-cover"
-       style="background:#fde2e4;display:flex;align-items:center;justify-content:center">
-    <i class="ri-keyboard-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Typing Speed Test</h3>
-      <span class="category-tag">Utility</span>
-    </div>
-
-    <p class="card-description">
-      Test your typing speed and accuracy in real time with a clean, distraction-free
-      interface designed to improve productivity.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-<!-- todo list -->
-<a href="./projects/todo-list/index.html"
-   class="card"
-   data-category="utility">
-
-  <div class="card-cover todo-cover"
-       style="background:#e0f2fe;display:flex;align-items:center;justify-content:center">
-    <i class="ri-checkbox-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Todo List App</h3>
-      <span class="category-tag">Utility</span>
-    </div>
-
-    <p class="card-description">
-      Organize tasks efficiently with a simple todo list that supports adding,
-      completing, and deleting tasks in a clean interface.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-
-<!-- Tic Tac Toe -->
-<a href="./projects/tic-tac-toe/index.html"
-   class="card"
-   data-category="strategy">
-
-  <div class="card-cover ttt-cover"
-       style="background:#ddd6fe;display:flex;align-items:center;justify-content:center">
-    <i class="ri-grid-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Tic Tac Toe</h3>
-      <span class="category-tag">Strategy</span>
-    </div>
-
-    <p class="card-description">
-      A classic two-player strategy game with a simple grid-based layout,
-      perfect for quick matches and logic practice.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-<!-- random quote -->
-<a href="./projects/random-quote-generator/index.html"
-   class="card"
-   data-category="fun">
-
-  <div class="card-cover quote-cover"
-       style="background:#fde68a;display:flex;align-items:center;justify-content:center">
-    <i class="ri-double-quotes-l"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Random Quote Generator</h3>
-      <span class="category-tag">Fun</span>
-    </div>
-
-    <p class="card-description">
-      Instantly displays random inspirational and motivational quotes
-      with a clean, minimal interface for daily inspiration.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-      <span>API</span>
-    </div>
-  </div>
-</a>
-
-
-<!-- password generator -->
-<a href="./projects/password-generator/index.html"
-   class="card"
-   data-category="security">
-
-  <div class="card-cover password-gen-cover"
-       style="background:#fecaca;display:flex;align-items:center;justify-content:center">
-    <i class="ri-lock-password-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Password Generator</h3>
-      <span class="category-tag">Security</span>
-    </div>
-
-    <p class="card-description">
-      Generates strong, random passwords with customizable options
-      to help keep your accounts secure.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-
-<!-- password strength checker -->
-<a href="./projects/password-strength-checker/index.html"
-   class="card"
-   data-category="security">
-
-  <div class="card-cover password-check-cover"
-       style="background:#bbf7d0;display:flex;align-items:center;justify-content:center">
-    <i class="ri-shield-check-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Password Strength Checker</h3>
-      <span class="category-tag">Security</span>
-    </div>
-
-    <p class="card-description">
-      Evaluates password strength in real time and provides feedback
-      to help users create safer, more secure passwords.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-<!-- digital clock -->
-<a href="./projects/digital-clock/index.html"
-   class="card"
-   data-category="utility">
-
-  <div class="card-cover clock-cover"
-       style="background:#fde2e4;display:flex;align-items:center;justify-content:center">
-    <i class="ri-time-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Digital Clock</h3>
-      <span class="category-tag">Utility</span>
-    </div>
-
-    <p class="card-description">
-      Displays the current time in real time with a clean digital interface,
-      updating every second for accuracy.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-<!-- counter app -->
-<a href="./projects/counter/index.html"
-   class="card"
-   data-category="utility">
-
-  <div class="card-cover counter-cover"
-       style="background:#e0f2fe;display:flex;align-items:center;justify-content:center">
-    <i class="ri-add-circle-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Counter App</h3>
-      <span class="category-tag">Utility</span>
-    </div>
-
-    <p class="card-description">
-      A simple counter application that allows users to increment, decrement,
-      and reset values with instant visual feedback.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-<!--image-slider-->
-<a href="./projects/image-slider/index.html"
-   class="card"
-   data-category="utility">
-
-  <div class="card-cover slider-cover"
-       style="background:#dbeafe;display:flex;align-items:center;justify-content:center">
-    <i class="ri-image-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Image Slider</h3>
-      <span class="category-tag">Utility</span>
-    </div>
-
-    <p class="card-description">
-      A smooth, responsive image slider with navigation controls,
-      perfect for showcasing images or featured content.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-<!-- BMI Calculator -->
-<a href="./projects/bmi-calculator/index.html"
-   class="card"
-   data-category="utility">
-
-  <div class="card-cover bmi-cover"
-       style="background:#c7f9cc;display:flex;align-items:center;justify-content:center">
-    <i class="ri-heart-pulse-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">BMI Calculator</h3>
-      <span class="category-tag">Utility</span>
-    </div>
-
-    <p class="card-description">
-      Calculates Body Mass Index using height and weight inputs,
-      helping users understand basic health metrics instantly.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-
-<!-- Age Calculator -->
-<a href="./projects/age-calculator/index.html"
-   class="card"
-   data-category="utility">
-
-  <div class="card-cover age-cover"
-       style="background:#bae6fd;display:flex;align-items:center;justify-content:center">
-    <i class="ri-calendar-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Age Calculator</h3>
-      <span class="category-tag">Utility</span>
-    </div>
-
-    <p class="card-description">
-      Calculates exact age in years, months, and days based on the selected
-      date of birth with instant results.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-
-<!-- Dictionary -->
-<a href="./projects/dictionary/index.html"
-   class="card"
-   data-category="utility">
-
-  <div class="card-cover dictionary-cover"
-       style="background:#ddd6fe;display:flex;align-items:center;justify-content:center">
-    <i class="ri-book-open-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Dictionary</h3>
-      <span class="category-tag">Utility</span>
-    </div>
-
-    <p class="card-description">
-      Search and explore word meanings, definitions, and usage examples
-      instantly using a clean and minimal interface.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-      <span>API</span>
-    </div>
-  </div>
-</a>
-
-
-
-<!-- Minesweeper -->
-<a href="./projects/minesweeper/index.html"
-   class="card"
-   data-category="puzzle">
-
-  <div class="card-cover minesweeper-cover"
-       style="background:#fecaca;display:flex;align-items:center;justify-content:center">
-    <i class="ri-bomb-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Minesweeper</h3>
-      <span class="category-tag">Puzzle</span>
-    </div>
-
-    <p class="card-description">
-      A classic logic-based puzzle game where players uncover safe cells,
-      flag mines, and clear the board without triggering explosions.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-    </div>
-  </div>
-</a>
-
-
-
-<!-- Battery Detector -->
-<a href="./projects/battery-detector/index.html"
-   class="card"
-   data-category="utility">
-
-  <div class="card-cover battery-cover"
-       style="background:#cffafe;display:flex;align-items:center;justify-content:center">
-    <i class="ri-battery-2-charge-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Battery Detector</h3>
-      <span class="category-tag">Utility</span>
-    </div>
-
-    <p class="card-description">
-      Detects device battery level, charging status, and remaining time
-      in real time using the browser Battery Status API.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-      <span>API</span>
-    </div>
-  </div>
-</a>
-
-
-
-<!-- Solar System Model -->
-<a href="./projects/solar-system/index.html"
-   class="card"
-   data-category="education">
-
-  <div class="card-cover solar-cover"
-       style="background:#fde68a;display:flex;align-items:center;justify-content:center">
-    <i class="ri-sun-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Solar System Model</h3>
-      <span class="category-tag">Education</span>
-    </div>
-
-    <p class="card-description">
-      An interactive and animated solar system simulation showing planets
-      orbiting the Sun with smooth motion and basic educational details.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-      <span>Animation</span>
-    </div>
-  </div>
-</a>
-
-
-
-<!-- Pixel Sandbox Simulation -->
-<a href="./projects/pixel-sandbox/index.html"
-   class="card"
-   data-category="simulation">
-
-  <div class="card-cover sandbox-cover"
-       style="background:#bae6fd;display:flex;align-items:center;justify-content:center">
-    <i class="ri-paint-brush-line"></i>
-  </div>
-
-  <div class="card-content">
-    <div class="card-header-flex">
-      <h3 class="card-heading">Pixel Sandbox Simulation</h3>
-      <span class="category-tag">Simulation</span>
-    </div>
-
-    <p class="card-description">
-      A real-time pixel-based sandbox where users can paint elements like sand,
-      water, stone, and acid and observe realistic physics-driven interactions.
-    </p>
-
-    <div class="card-tech">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-      <span>Canvas</span>
-    </div>
-  </div>
-</a>
-
-
-        <!-- Add more projects here -->
-       
-
-    </div>
-
-    <!-- Pagination -->
-    <div class="pagination-container" id="pagination-controls"></div>
-
-    <!-- Contribute -->
-    <section id="contribute" class="contribute-section">
-    <div id="contribute" class="contribute-section">
-        <h3>How to Contribute</h3>
-        <div class="steps">
-            <div class="step-card">
-                <div class="step-icon"><i class="ri-git-branch-line"></i></div>
-                <h4>Fork & Clone</h4>
-                <code>git clone https://github.com/your-username/OpenPlayground</code>
-            </div>
-            <div class="step-card">
-                <div class="step-icon"><i class="ri-folder-add-line"></i></div>
-                <h4>Create Project</h4>
-                <code>mkdir projects/my-project</code>
-            </div>
-            <div class="step-card">
-                <div class="step-icon"><i class="ri-git-pull-request-line"></i></div>
-                <h4>Submit PR</h4>
-                <code>git commit -m "Add: My Project"</code>
-            </div>
-        </div>
-    </section>
-        <p>Ready to showcase your project?</p>
-        <!-- unchanged contribute section -->
-    </div>
-
-</section>
-
-<button id="scrollToTopBtn"><i class="ri-arrow-up-double-fill"></i></button>
-
-<footer class="footer">
-    <div class="footer-container">
-        <p>© 2026 OpenPlayground. Built by the community.</p>
-        <div class="footer-links">
-            <a href="#projects">Projects</a>
-            <a href="#contribute">Contribute</a>
-            <a href="https://github.com/YadavAkhileshh/OpenPlayground" target="_blank">GitHub</a>
-        </div>
-    </div>
-</footer>
-
-<script>
-    const cards = Array.from(document.querySelectorAll(".projects-container .card"));
-    const paginationContainer = document.getElementById("pagination-controls");
-  
-    let currentPage = 1;
-    let cardsPerPage = 9;
-  
-    function getCardsPerPage() {
-      const container = document.querySelector(".projects-container");
-      const card = container.querySelector(".card");
-      if (!card) return 9;
-  
-      const containerWidth = container.clientWidth;
-      const cardWidth = card.clientWidth + 24; // include gap
-      const columns = Math.floor(containerWidth / cardWidth);
-  
-      // Always fill complete rows (3 rows)
-      return columns * 3;
-    }
-  
-    function showPage(page) {
-      currentPage = page;
-      cardsPerPage = getCardsPerPage();
-  
-      const start = (page - 1) * cardsPerPage;
-      const end = start + cardsPerPage;
-  
-      cards.forEach((card, index) => {
-        card.classList.toggle("hidden", index < start || index >= end);
-      });
-  
-      updateActiveButton();
-    }
-  
-    function createPagination() {
-      paginationContainer.innerHTML = "";
-      cardsPerPage = getCardsPerPage();
-      const totalPages = Math.ceil(cards.length / cardsPerPage);
-  
-      for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = i;
-        btn.addEventListener("click", () => showPage(i));
-        paginationContainer.appendChild(btn);
-      }
-    }
-  
-    function updateActiveButton() {
-      paginationContainer.querySelectorAll("button").forEach((btn, i) => {
-        btn.classList.toggle("active", i + 1 === currentPage);
-      });
-    }
-  
-    // Recalculate on resize
-    window.addEventListener("resize", () => {
-      createPagination();
-      showPage(1);
-    });
-  
-    // Init
-    createPagination();
-    showPage(1);
-  </script>
-  
-  
+            `;
+        }
+
+        // Initialize contributors when components are loaded
+        document.addEventListener('componentLoaded', (e) => {
+            if (e.detail.component === 'contributors') {
+                setTimeout(fetchContributors, 100);
+            }
+        });
+    </script>
+
+    <!-- Projects Management Script -->
+    <script>
+        // PROJECTS FILTERING AND PAGINATION SYSTEM
+        class ProjectManager {
+            constructor() {
+                this.cards = [];
+                this.filteredCards = [];
+                this.paginationContainer = null;
+                this.emptyState = null;
+                this.searchInput = null;
+                this.sortSelect = null;
+                this.filterButtons = [];
+
+                this.currentPage = 1;
+                this.cardsPerPage = 9;
+                this.currentFilter = "all";
+                this.currentSort = "default";
+                this.currentSearch = "";
+
+                // Wait for components to load
+                document.addEventListener('componentLoaded', (e) => {
+                    if (e.detail.component === 'projects') {
+                        setTimeout(() => this.init(), 100);
+                    }
+                });
+            }
+
+            init() {
+                this.cards = Array.from(document.querySelectorAll(".projects-container .card"));
+                this.paginationContainer = document.getElementById("pagination-controls");
+                this.emptyState = document.getElementById("empty-state");
+                this.searchInput = document.getElementById("project-search");
+                this.sortSelect = document.getElementById("project-sort");
+                this.filterButtons = document.querySelectorAll(".filter-btn");
+
+                if (this.cards.length === 0) {
+                    console.log('No project cards found, retrying...');
+                    setTimeout(() => this.init(), 500);
+                    return;
+                }
+
+                // Show all cards initially
+                this.cards.forEach(card => {
+                    card.style.display = "block";
+                    card.classList.remove("hidden");
+                });
+
+                this.addDateAttributes();
+                this.initEventListeners();
+                this.applyFilters();
+            }
+
+            addDateAttributes() {
+                const currentDate = new Date();
+                this.cards.forEach((card, index) => {
+                    if (!card.hasAttribute('data-date')) {
+                        const daysAgo = Math.floor(index / 3);
+                        const fakeDate = new Date(currentDate);
+                        fakeDate.setDate(currentDate.getDate() - daysAgo);
+                        card.setAttribute('data-date', fakeDate.toISOString());
+                    }
+                });
+            }
+
+            initEventListeners() {
+                if (this.searchInput) {
+                    this.searchInput.addEventListener("input", (e) => {
+                        this.currentSearch = e.target.value.toLowerCase();
+                        this.applyFilters();
+                        this.showPage(1);
+                    });
+                }
+
+                if (this.sortSelect) {
+                    this.sortSelect.addEventListener("change", (e) => {
+                        this.currentSort = e.target.value;
+                        this.applyFilters();
+                        this.showPage(1);
+                    });
+                }
+
+                this.filterButtons.forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        this.filterButtons.forEach(b => b.classList.remove("active"));
+                        btn.classList.add("active");
+                        this.currentFilter = btn.dataset.filter;
+                        this.applyFilters();
+                        this.showPage(1);
+                    });
+                });
+
+                window.addEventListener("resize", () => {
+                    this.updatePagination();
+                });
+            }
+
+            applyFilters() {
+                let filtered = [...this.cards];
+
+                // Apply search filter
+                if (this.currentSearch) {
+                    filtered = filtered.filter(card => {
+                        const title = card.querySelector(".card-heading")?.textContent.toLowerCase() || '';
+                        const description = card.querySelector(".card-description")?.textContent.toLowerCase() || '';
+                        const tech = card.querySelector(".card-tech")?.textContent.toLowerCase() || '';
+                        const category = card.dataset.category?.toLowerCase() || '';
+
+                        return title.includes(this.currentSearch) ||
+                            description.includes(this.currentSearch) ||
+                            tech.includes(this.currentSearch) ||
+                            category.includes(this.currentSearch);
+                    });
+                }
+
+                // Apply category filter
+                if (this.currentFilter !== "all") {
+                    filtered = filtered.filter(card =>
+                        card.dataset.category === this.currentFilter
+                    );
+                }
+
+                // Apply sorting
+                filtered = this.sortCards(filtered);
+
+                this.filteredCards = filtered;
+                this.showAllCards();
+                this.updateEmptyState();
+            }
+
+            sortCards(cards) {
+                const sorted = [...cards];
+
+                switch (this.currentSort) {
+                    case "az":
+                        sorted.sort((a, b) => {
+                            const titleA = a.querySelector(".card-heading")?.textContent.toLowerCase() || '';
+                            const titleB = b.querySelector(".card-heading")?.textContent.toLowerCase() || '';
+                            return titleA.localeCompare(titleB);
+                        });
+                        break;
+
+                    case "za":
+                        sorted.sort((a, b) => {
+                            const titleA = a.querySelector(".card-heading")?.textContent.toLowerCase() || '';
+                            const titleB = b.querySelector(".card-heading")?.textContent.toLowerCase() || '';
+                            return titleB.localeCompare(titleA);
+                        });
+                        break;
+
+                    case "newest":
+                        sorted.sort((a, b) => {
+                            const dateA = new Date(a.getAttribute("data-date"));
+                            const dateB = new Date(b.getAttribute("data-date"));
+                            return dateB - dateA;
+                        });
+                        break;
+                }
+
+                return sorted;
+            }
+
+            showAllCards() {
+                // Show all filtered cards without pagination
+                this.cards.forEach(card => {
+                    card.style.display = "none";
+                });
+
+                this.filteredCards.forEach(card => {
+                    card.style.display = "block";
+                });
+            }
+
+            updatePagination() {
+                if (!this.paginationContainer) return;
+                
+                this.paginationContainer.innerHTML = "";
+                const totalPages = Math.ceil(this.filteredCards.length / this.cardsPerPage);
+
+                if (totalPages > 1) {
+                    // Previous button
+                    if (this.currentPage > 1) {
+                        const prevBtn = document.createElement("button");
+                        prevBtn.innerHTML = "&laquo;";
+                        prevBtn.addEventListener("click", () => this.showPage(this.currentPage - 1));
+                        this.paginationContainer.appendChild(prevBtn);
+                    }
+
+                    // Page buttons
+                    const maxVisiblePages = 5;
+                    let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+                    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+                    if (endPage - startPage + 1 < maxVisiblePages) {
+                        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                    }
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        const btn = document.createElement("button");
+                        btn.textContent = i;
+                        btn.classList.toggle("active", i === this.currentPage);
+                        btn.addEventListener("click", () => this.showPage(i));
+                        this.paginationContainer.appendChild(btn);
+                    }
+
+                    // Next button
+                    if (this.currentPage < totalPages) {
+                        const nextBtn = document.createElement("button");
+                        nextBtn.innerHTML = "&raquo;";
+                        nextBtn.addEventListener("click", () => this.showPage(this.currentPage + 1));
+                        this.paginationContainer.appendChild(nextBtn);
+                    }
+
+                    this.paginationContainer.style.display = "flex";
+                } else {
+                    this.paginationContainer.style.display = "none";
+                }
+            }
+
+            updateActiveButton() {
+                if (!this.paginationContainer) return;
+                
+                const buttons = this.paginationContainer.querySelectorAll("button");
+                buttons.forEach(btn => {
+                    if (btn.innerHTML !== "&laquo;" && btn.innerHTML !== "&raquo;") {
+                        const pageNum = parseInt(btn.textContent);
+                        btn.classList.toggle("active", pageNum === this.currentPage);
+                    }
+                });
+            }
+
+            updateEmptyState() {
+                if (!this.emptyState) return;
+                
+                if (this.filteredCards.length === 0) {
+                    this.emptyState.style.display = "block";
+                } else {
+                    this.emptyState.style.display = "none";
+                }
+            }
+
+            scrollToProjects() {
+                const projectsSection = document.getElementById("projects");
+                if (projectsSection && this.currentPage > 1) {
+                    const navbarHeight = 75;
+                    const targetPosition = projectsSection.offsetTop - navbarHeight;
+
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener("DOMContentLoaded", function () {
+            window.ProjectManager = new ProjectManager();
+        });
+    </script>
+
+    <!-- Force scroll to top on page load -->
+    <script>
+        window.addEventListener('load', function () {
+            window.scrollTo(0, 0);
+            setTimeout(() => window.scrollTo(0, 0), 100);
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            window.scrollTo(0, 0);
+        });
+    </script>
 </body>
-<script src="./js/app.js"></script>
+
 </html>
