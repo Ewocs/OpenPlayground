@@ -308,7 +308,7 @@ function renderProjects() {
     if (visibilityEngine) {
         const visibleProjectIds = visibilityEngine.getVisibleProjects();
         const visibleIdSet = new Set(visibleProjectIds);
-        filteredProjects = filteredProjects.filter(project => 
+        filteredProjects = filteredProjects.filter(project =>
             visibleIdSet.has(project.title)
         );
     }
@@ -561,15 +561,29 @@ async function fetchContributors() {
         contributorsGrid.innerHTML = "";
 
         contributors.forEach((contributor, index) => {
-            const card = document.createElement("a");
-            card.href = contributor.html_url;
-            card.target = "_blank";
-            card.rel = "noopener noreferrer";
+            const card = document.createElement("div");
             card.className = "contributor-card";
+
+            // Determine if this is a developer (>50 contributions)
+            const isDeveloper = contributor.contributions > 50;
+            const badgeHTML = isDeveloper
+                ? `<span class="contributor-badge developer-badge"><i class="ri-code-s-slash-line"></i> Developer</span>`
+                : '';
 
             card.innerHTML = `
                 <img src="${contributor.avatar_url}" alt="${contributor.login}" class="contributor-avatar" loading="lazy">
-                <span class="contributor-name">${contributor.login}</span>
+                <div class="contributor-info">
+                    <h3 class="contributor-name">${contributor.login}</h3>
+                    <div class="contributor-stats">
+                        <span class="contributor-contributions">
+                            <i class="ri-git-commit-line"></i> ${contributor.contributions} contributions
+                        </span>
+                        ${badgeHTML}
+                    </div>
+                </div>
+                <a href="${contributor.html_url}" target="_blank" rel="noopener noreferrer" class="contributor-github-link" aria-label="View ${contributor.login} on GitHub">
+                    <i class="ri-github-fill"></i>
+                </a>
             `;
 
             // Stagger animation
@@ -624,15 +638,80 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 // Initialize
 // ===============================
 
-// Initialize project data and contributor list on page load
-fetchProjects();
-fetchContributors();
+// Wait for all components to be loaded before initializing
+// The components.js dispatches a 'componentLoaded' event when each component is loaded
+let componentsLoaded = 0;
+const totalComponents = 6; // header, hero, projects, contribute, footer, chatbot
+
+document.addEventListener('componentLoaded', (e) => {
+    componentsLoaded++;
+    console.log(`✅ Component loaded: ${e.detail.component} (${componentsLoaded}/${totalComponents})`);
+
+    // Once all components are loaded, initialize the app
+    if (componentsLoaded === totalComponents) {
+        console.log('🎉 All components loaded! Initializing app...');
+        initializeApp();
+    }
+});
+
+// Also add a fallback timeout in case event doesn't fire
+setTimeout(() => {
+    if (componentsLoaded < totalComponents) {
+        console.log('⏰ Timeout reached, initializing app anyway...');
+        initializeApp();
+    }
+}, 3000);
+
+function initializeApp() {
+    // Initialize project data
+    fetchProjects();
+
+    console.log('🚀 OpenPlayground app initialized!');
+}
 
 // Console message
 console.log(
     "%c🚀 Want to contribute? https://github.com/YadavAkhileshh/OpenPlayground",
     "color: #6366f1; font-size: 14px; font-weight: bold;"
 );
+
+feat / your - feature
+// ================= CATEGORY FILTERING FOR PROJECTS =================
+document.addEventListener("DOMContentLoaded", () => {
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const projectCards = document.querySelectorAll(".projects-container .card");
+    const emptyState = document.getElementById("empty-state");
+
+    filterButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            // Active button UI
+            filterButtons.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            const selectedCategory = btn.dataset.filter;
+            let visibleCount = 0;
+
+            projectCards.forEach((card) => {
+                const cardCategory = card.dataset.category;
+
+                if (
+                    selectedCategory === "all" ||
+                    cardCategory === selectedCategory
+                ) {
+                    card.style.display = "block";
+                    visibleCount++;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+
+            // Empty state handling
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? "block" : "none";
+            }
+        });
+    });
+});
 
 
 // --- 1. Navbar Scroll Logic ---
