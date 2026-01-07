@@ -931,7 +931,17 @@
   "link": "./projects/Virtual_Control_Panel/index.html",
   "icon": "ri-dashboard-2-line",
   "coverStyle": "background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color:#f8fafc;"
+},
+{
+  "title": "Random Encounter Generator",
+  "category": "utility",
+  "description": "Generate random encounter scenarios with visual indicators and smooth animations.",
+  "tech": ["HTML", "CSS", "JS"],
+  "link": "./projects/Random_Encounter_Generator/index.html",
+  "icon": "ri-sword-line",
+  "coverStyle": "background: linear-gradient(135deg, #064e3b 0%, #16a34a 100%); color:#ecfdf5;"
 }
+
 
 
 ]
