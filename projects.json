@@ -10,6 +10,15 @@
   "coverClass": "image-preview-cover"
 },
   {
+    "title": "Markdown Editor & Preview",
+    "category": "utility",
+    "description": "A live markdown editor that shows real-time preview side by side.",
+    "tech": ["HTML", "CSS", "JS"],
+    "link": "./projects/markdown-editor-preview/index.html",
+    "icon": "ri-markdown-line",
+    "coverStyle": "background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;"
+  },
+  {
     "title": "Stack vs Queue Visualizer",
     "category": "utility",
     "description": "Interactive visualizer to understand Stack (LIFO) and Queue (FIFO) operations with animations and explanations.",
