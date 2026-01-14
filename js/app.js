@@ -4,11 +4,6 @@
 
 import { ProjectVisibilityEngine } from "./core/projectVisibilityEngine.js";
 
-/**
- * ProjectManager
- * Manages project data fetching, filtering, and rendering.
- * Acts as the centerpiece for the OpenPlayground project hub.
- */
 class ProjectManager {
     constructor() {
         // Prevent multiple instances
