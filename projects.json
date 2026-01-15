@@ -3145,6 +3145,20 @@
   "link": "./projects/one-click-relax-button/index.html",
   "icon": "ri-heart-pulse-line",
   "coverStyle": "background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #d1fae5 100%); color: #064e3b;"
+},
+{
+  "title": "Reflex Pulse",
+  "category": "game",
+  "difficulty": "Intermediate",
+  "description": "A one-button reflex game where players must tap at the perfect moment as an expanding pulse aligns with a target ring. Focused on timing, precision, and smooth visual feedback.",
+  "tech": [
+    "HTML",
+    "CSS",
+    "JavaScript"
+  ],
+  "link": "./projects/reflex-pulse/index.html",
+  "icon": "ri-focus-3-line",
+  "coverStyle": "background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); color: #e5e7eb;"
 }
 
 
