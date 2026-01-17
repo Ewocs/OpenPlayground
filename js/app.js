@@ -26,6 +26,7 @@ class ProjectManager {
         };
 
         this.elements = null;
+        this.ratings = {};
         window.projectManagerInstance = this;
     }
 
@@ -36,6 +37,7 @@ class ProjectManager {
 
         // Cache DOM elements once
         this.elements = this.getElements();
+        this.loadRatings(); // Load ratings from localStorage
         this.setupEventListeners();
         await this.fetchProjects();
 
@@ -226,6 +228,119 @@ class ProjectManager {
         window.location.href = randomProject.link;
     }
 
+    // Rating functionality
+    loadRatings() {
+        const stored = localStorage.getItem('projectRatings');
+        this.ratings = stored ? JSON.parse(stored) : {};
+    }
+
+    saveRatings() {
+        localStorage.setItem('projectRatings', JSON.stringify(this.ratings));
+    }
+
+    getProjectRating(projectTitle) {
+        const key = this.sanitizeKey(projectTitle);
+        const projectRatings = this.ratings[key] || [];
+        if (projectRatings.length === 0) return { average: 0, count: 0 };
+        
+        const sum = projectRatings.reduce((acc, r) => acc + r.rating, 0);
+        return {
+            average: sum / projectRatings.length,
+            count: projectRatings.length
+        };
+    }
+
+    sanitizeKey(title) {
+        return title.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+    }
+
+    generateStars(rating) {
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= rating) {
+                stars += '<i class="ri-star-fill"></i>';
+            } else if (i - 0.5 <= rating) {
+                stars += '<i class="ri-star-half-fill"></i>';
+            } else {
+                stars += '<i class="ri-star-line"></i>';
+            }
+        }
+        return stars;
+    }
+
+    showRatingModal(project) {
+        const modal = document.createElement('div');
+        modal.className = 'rating-modal-overlay';
+        modal.innerHTML = `
+            <div class="rating-modal">
+                <div class="rating-modal-header">
+                    <h3>Rate "${project.title}"</h3>
+                    <button class="rating-modal-close">&times;</button>
+                </div>
+                <div class="rating-modal-body">
+                    <div class="star-rating">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                    <textarea placeholder="Leave a review (optional)" class="review-textarea"></textarea>
+                    <button class="submit-rating">Submit Rating</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Star selection
+        const stars = modal.querySelectorAll('.star');
+        let selectedRating = 0;
+        
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.dataset.rating);
+                stars.forEach((s, i) => {
+                    s.classList.toggle('selected', i < selectedRating);
+                });
+            });
+        });
+        
+        // Close modal
+        modal.querySelector('.rating-modal-close').addEventListener('click', () => {
+            modal.remove();
+        });
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.remove();
+        });
+        
+        // Submit rating
+        modal.querySelector('.submit-rating').addEventListener('click', () => {
+            if (selectedRating > 0) {
+                const review = modal.querySelector('.review-textarea').value.trim();
+                this.submitRating(project.title, selectedRating, review);
+                modal.remove();
+                this.render(); // Re-render to update ratings
+            }
+        });
+    }
+
+    submitRating(projectTitle, rating, review) {
+        const key = this.sanitizeKey(projectTitle);
+        if (!this.ratings[key]) {
+            this.ratings[key] = [];
+        }
+        
+        this.ratings[key].push({
+            rating: rating,
+            review: review,
+            timestamp: Date.now()
+        });
+        
+        this.saveRatings();
+    }
+
     showSkeletonCards() {
         const el = this.elements;
         if (!el.projectsGrid) return;
@@ -278,6 +393,20 @@ class ProjectManager {
         if (sortMode === 'az') filtered.sort((a, b) => a.title.localeCompare(b.title));
         else if (sortMode === 'za') filtered.sort((a, b) => b.title.localeCompare(a.title));
         else if (sortMode === 'newest') filtered.reverse();
+        else if (sortMode === 'rating-high') {
+            filtered.sort((a, b) => {
+                const ratingA = this.getProjectRating(a.title).average;
+                const ratingB = this.getProjectRating(b.title).average;
+                return ratingB - ratingA; // Higher ratings first
+            });
+        }
+        else if (sortMode === 'rating-low') {
+            filtered.sort((a, b) => {
+                const ratingA = this.getProjectRating(a.title).average;
+                const ratingB = this.getProjectRating(b.title).average;
+                return ratingA - ratingB; // Lower ratings first
+            });
+        }
 
         // Pagination
         const totalPages = Math.ceil(filtered.length / this.config.ITEMS_PER_PAGE);
@@ -337,6 +466,8 @@ class ProjectManager {
             const coverStyle = project.coverStyle || '';
             const coverClass = project.coverClass || '';
             const sourceUrl = this.getSourceCodeUrl(project.link);
+            const rating = this.getProjectRating(project.title);
+            const starsHtml = this.generateStars(rating.average);
 
             return `
                 <div class="card fade-in" data-category="${this.escapeHtml(project.category)}" onclick="window.location.href='${this.escapeHtml(project.link)}'; event.stopPropagation();">
@@ -346,6 +477,11 @@ class ProjectManager {
                                 onclick="event.preventDefault(); event.stopPropagation(); window.toggleProjectBookmark(this, '${this.escapeHtml(project.title)}', '${this.escapeHtml(project.link)}', '${this.escapeHtml(project.category)}', '${this.escapeHtml(project.description || '')}');"
                                 title="${isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}">
                             <i class="${isBookmarked ? 'ri-bookmark-fill' : 'ri-bookmark-line'}"></i>
+                        </button>
+                        <button class="rating-btn" 
+                                onclick="event.preventDefault(); event.stopPropagation(); window.projectManagerInstance.showRatingModal(${JSON.stringify(project).replace(/"/g, '&quot;')});"
+                                title="Rate this project">
+                            <i class="ri-star-line"></i>
                         </button>
                         <a href="${sourceUrl}" target="_blank" class="source-btn" 
                            onclick="event.stopPropagation();" 
@@ -363,6 +499,10 @@ class ProjectManager {
                                 <span class="category-tag">${this.capitalize(project.category)}</span>
                             </div>
                             <p class="card-description">${this.escapeHtml(project.description || '')}</p>
+                            <div class="card-rating">
+                                <div class="rating-stars">${starsHtml}</div>
+                                <span class="rating-score">${rating.average > 0 ? rating.average.toFixed(1) : 'No ratings'} ${rating.count > 0 ? `(${rating.count})` : ''}</span>
+                            </div>
                             <div class="card-tech">${techHtml}</div>
                         </div>
                     </div>

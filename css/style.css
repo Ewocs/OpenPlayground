@@ -476,6 +476,7 @@ button#themeToggle {
 
 /* Base style for buttons in card-actions */
 .card-actions .bookmark-btn,
+.card-actions .rating-btn,
 .card-actions .source-btn {
   position: static;
   width: 36px;
@@ -501,6 +502,7 @@ button#themeToggle {
 
 /* Hover effects */
 .card-actions .bookmark-btn:hover,
+.card-actions .rating-btn:hover,
 .card-actions .source-btn:hover {
   background: var(--primary-50);
   border-color: var(--primary-500);
@@ -509,6 +511,7 @@ button#themeToggle {
 }
 
 .card:hover .card-actions .bookmark-btn,
+.card:hover .card-actions .rating-btn,
 .card:hover .card-actions .source-btn {
   opacity: 1;
   transform: scale(1);
@@ -525,12 +528,14 @@ button#themeToggle {
 
 /* Dark theme overrides */
 html[data-theme="dark"] .card-actions .bookmark-btn,
+html[data-theme="dark"] .card-actions .rating-btn,
 html[data-theme="dark"] .card-actions .source-btn {
   background: var(--surface-elevated);
   border-color: var(--border-default);
 }
 
 html[data-theme="dark"] .card-actions .bookmark-btn:hover,
+html[data-theme="dark"] .card-actions .rating-btn:hover,
 html[data-theme="dark"] .card-actions .source-btn:hover {
   background: rgba(255, 107, 53, 0.2);
   color: var(--primary-400);
@@ -1507,6 +1512,29 @@ html[data-theme="dark"] .difficulty-badge {
   line-height: 1.5;
   margin-bottom: var(--space-4);
   flex-grow: 1;
+}
+
+.card-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.rating-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.rating-stars i {
+  font-size: 0.875rem;
+  color: #fbbf24;
+}
+
+.rating-score {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .card-tech {
