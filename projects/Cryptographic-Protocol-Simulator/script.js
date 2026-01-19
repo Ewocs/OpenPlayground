@@ -403,7 +403,7 @@ class MITMProtocol extends ProtocolBase {
                 break;
             case 2:
                 this.ui.log("Eve sends her own Key (E) to Bob (pretending to be Alice).", "attack");
-                this.ui.animatePacket('bob', 'alice', 'Key: E (Spoofed)', false); // Actually sent from Eve location visually would need CSS tweak, kept simple here
+                this.ui.animatePacket('eve', 'bob', 'Key: E (Spoofed)', false);
                 this.ui.updateMemory('bob', 'Received Key', 'E (Thinking it is A)', false);
                 break;
             case 3:
