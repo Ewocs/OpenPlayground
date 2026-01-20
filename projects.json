@@ -684,16 +684,17 @@
   },
   {
     "title": "Pomodoro Timer",
-    "category": "utility",
-    "description": "Work & break productivity timer.",
+    "category": "productivity",
+    "difficulty": "Intermediate",
+    "description": "A customizable productivity timer using the Pomodoro Technique with focus and break intervals.",
     "tech": [
       "HTML",
       "CSS",
-      "JS"
+      "JavaScript"
     ],
-    "link": "./projects/PomodoroTimer/index.html",
-    "icon": "ri-timer-flash-line",
-    "coverStyle": "background: #4f46e5; color: white;"
+    "link": "projects/PomodoroTimer/index.html",
+    "icon": "fas fa-stopwatch",
+    "coverStyle": "background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);"
   },
   {
     "title": "Reaction Time",
