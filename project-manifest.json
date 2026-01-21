@@ -1317,6 +1317,11 @@
       "folder": "WebKernel",
       "path": "./projects/webkernel/project.json",
       "link": "./projects/webkernel/index.html"
+    },
+    {
+      "folder": "BiosphereJS",
+      "path": "./projects/biospherejs/project.json",
+      "link": "./projects/biospherejs/index.html"
     }
 
   ]
