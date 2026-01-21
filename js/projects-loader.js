@@ -22,6 +22,8 @@ class ProjectsLoader {
         this.container.innerHTML = '';
         for (let i = 0; i < this.cardsPerPage; i++) {
             const skeleton = this.createSkeletonCard();
+            // Add staggered animation delay for skeleton cards
+            skeleton.style.animationDelay = `${i * 0.03}s`;
             this.container.appendChild(skeleton);
         }
     }
@@ -273,8 +275,10 @@ const difficultyLabel = this.capitalizeFirst(difficulty);
             return;
         }
         
-        pageProjects.forEach(project => {
+        pageProjects.forEach((project, index) => {
             const card = this.createProjectCard(project);
+            // Add staggered animation delay for smooth sequential appearance
+            card.style.animationDelay = `${index * 0.05}s`;
             this.container.appendChild(card);
         });
         

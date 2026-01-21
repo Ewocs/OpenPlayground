@@ -1248,6 +1248,8 @@ html[data-theme="dark"] .section-badge {
   flex-direction: column;
   position: relative;
   cursor: pointer;
+  animation: fadeInCard 0.6s ease-out forwards;
+  opacity: 0;
 }
 
 .card::before {
@@ -1271,6 +1273,16 @@ html[data-theme="dark"] .section-badge {
 
 .card:hover::before {
   opacity: 1;
+}
+
+/* Prevent hover effects on skeleton cards */
+.skeleton-card:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.skeleton-card:hover::before {
+  opacity: 0;
 }
 
 .card-cover {
@@ -2868,6 +2880,7 @@ html[data-theme="dark"] .team-role {
 /* Skeleton Loading */
 .skeleton-card {
   pointer-events: none;
+  animation: fadeInCard 0.3s ease-out forwards;
 }
 
 .skeleton {
@@ -2916,6 +2929,19 @@ html[data-theme="dark"] .team-role {
 
   100% {
     background-position: -200% 0;
+  }
+}
+
+/* Fade-in animation for cards */
+@keyframes fadeInCard {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
