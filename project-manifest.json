@@ -14,27 +14,9 @@
       "link": "./projects/2048-puzzle/index.html"
     },
     {
-      "folder": "MinimalSurvival",
-      "path": "./projects/MinimalSurvival/project.json",
-      "link": "./projects/MinimalSurvival/index.html"
-    },
-    {
       "folder": "365Days",
       "path": "./projects/365Days/project.json",
       "link": "./projects/365Days/index.html"
-    },
-    {
-      "folder": "DigitalEnergyMeter",
-      "path": "./projects/DigitalEnergyMeter/project.json",
-      "link": "./projects/DigitalEnergyMeter/index.html"
-    },
-    {
-      "folder": "DigitalPresenceMirror",
-      "path": "./projects/DigitalPresenceMirror/project.json",
-      "link": "./projects/DigitalPresenceMirror/index.html",
-      "folder": "ThoughtSpeedAnalyzer",
-      "path": "./projects/ThoughtSpeedAnalyzer/project.json",
-      "link": "./projects/ThoughtSpeedAnalyzer/index.html"
     },
     {
       "folder": "AccessibilityColorLab",
@@ -90,6 +72,11 @@
       "folder": "Alarm-app",
       "path": "./projects/Alarm-app/project.json",
       "link": "./projects/Alarm-app/index.html"
+    },
+    {
+      "folder": "AmbientFocusRoom",
+      "path": "./projects/AmbientFocusRoom/project.json",
+      "link": "./projects/AmbientFocusRoom/index.html"
     },
     {
       "folder": "astroid-game",
@@ -207,11 +194,6 @@
       "link": "./projects/ChallengeGenerator/index.html"
     },
     {
-      "folder": "AmbientFocusRoom",
-      "path": "./projects/AmbientFocusRoom/project.json",
-      "link": "./projects/AmbientFocusRoom/index.html"
-    },
-    {
       "folder": "ChaloCanteen",
       "path": "./projects/ChaloCanteen/project.json",
       "link": "./projects/ChaloCanteen/index.html"
@@ -225,6 +207,11 @@
       "folder": "chat-app",
       "path": "./projects/chat-app/project.json",
       "link": "./projects/chat-app/index.html"
+    },
+    {
+      "folder": "checkers",
+      "path": "./projects/checkers/project.json",
+      "link": "./projects/checkers/index.html"
     },
     {
       "folder": "chess",
@@ -417,6 +404,11 @@
       "link": "./projects/Digital-Minimalism-Experiment/index.html"
     },
     {
+      "folder": "DigitalEnergyMeter",
+      "path": "./projects/DigitalEnergyMeter/project.json",
+      "link": "./projects/DigitalEnergyMeter/index.html"
+    },
+    {
       "folder": "DigitalFootprintVisualizer",
       "path": "./projects/DigitalFootprintVisualizer/project.json",
       "link": "./projects/DigitalFootprintVisualizer/index.html"
@@ -500,6 +492,11 @@
       "folder": "Event-Countdown-Timer",
       "path": "./projects/Event-Countdown-Timer/project.json",
       "link": "./projects/Event-Countdown-Timer/index.html"
+    },
+    {
+      "folder": "evorefresh",
+      "path": "./projects/evorefresh/project.json",
+      "link": "./projects/evorefresh/index.html"
     },
     {
       "folder": "evoshapes",
@@ -717,9 +714,19 @@
       "link": "./projects/internet-speed-tester/index.html"
     },
     {
+      "folder": "InvisibleNav",
+      "path": "./projects/InvisibleNav/project.json",
+      "link": "./projects/InvisibleNav/index.html"
+    },
+    {
       "folder": "iridium-game",
       "path": "./projects/iridium-game/project.json",
       "link": "./projects/iridium-game/index.html"
+    },
+    {
+      "folder": "json-formattor",
+      "path": "./projects/json-formattor/project.json",
+      "link": "./projects/json-formattor/index.html"
     },
     {
       "folder": "kanban-board",
@@ -740,6 +747,11 @@
       "folder": "keyplayground",
       "path": "./projects/keyplayground/project.json",
       "link": "./projects/keyplayground/index.html"
+    },
+    {
+      "folder": "kinetic-loader",
+      "path": "./projects/kinetic-loader/project.json",
+      "link": "./projects/kinetic-loader/index.html"
     },
     {
       "folder": "Kinetic-Typography",
@@ -775,6 +787,11 @@
       "folder": "Luxury-Todo-list",
       "path": "./projects/Luxury-Todo-list/project.json",
       "link": "./projects/Luxury-Todo-list/index.html"
+    },
+    {
+      "folder": "lyric-search",
+      "path": "./projects/lyric-search/project.json",
+      "link": "./projects/lyric-search/index.html"
     },
     {
       "folder": "markdown-previewer",
@@ -845,6 +862,11 @@
       "folder": "MinimalCountdown",
       "path": "./projects/MinimalCountdown/project.json",
       "link": "./projects/MinimalCountdown/index.html"
+    },
+    {
+      "folder": "MinimalSurvival",
+      "path": "./projects/MinimalSurvival/project.json",
+      "link": "./projects/MinimalSurvival/index.html"
     },
     {
       "folder": "mistakerunner",
@@ -1272,6 +1294,11 @@
       "link": "./projects/ReverseMaze/index.html"
     },
     {
+      "folder": "RiskRewardGambler",
+      "path": "./projects/RiskRewardGambler/project.json",
+      "link": "./projects/RiskRewardGambler/index.html"
+    },
+    {
       "folder": "roadmap-generator",
       "path": "./projects/roadmap-generator/project.json",
       "link": "./projects/roadmap-generator/index.html"
@@ -1580,6 +1607,11 @@
       "folder": "UnlimitedColors",
       "path": "./projects/UnlimitedColors/project.json",
       "link": "./projects/UnlimitedColors/index.html"
+    },
+    {
+      "folder": "untangle",
+      "path": "./projects/untangle/project.json",
+      "link": "./projects/untangle/index.html"
     },
     {
       "folder": "url-shortener",
