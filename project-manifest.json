@@ -244,6 +244,11 @@
       "link": "./projects/CodeEditor/index.html"
     },
     {
+      "folder": "file-size-converter",
+      "path": "./projects/file-size-converter/project.json",
+      "link": "./projects/file-size-converter/index.html"
+    },
+    {
       "folder": "MemoryFade",
       "path": "./projects/MemoryFade/project.json",
       "link": "./projects/MemoryFade/index.html"
