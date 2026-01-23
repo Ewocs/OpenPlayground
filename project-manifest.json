@@ -14,6 +14,11 @@
       "link": "./projects/2048-puzzle/index.html"
     },
     {
+      "folder": "Attention Garden",
+      "path": "./projects/AttentionGarden/project.json",
+      "link": "./projects/AttentionGarden/index.html"
+    },
+    {
       "folder": "365Days",
       "path": "./projects/365Days/project.json",
       "link": "./projects/365Days/index.html"
