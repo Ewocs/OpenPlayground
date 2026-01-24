@@ -279,10 +279,17 @@ class ProjectManager {
             const coverStyle = project.coverStyle || '';
             const coverClass = project.coverClass || '';
             const sourceUrl = this.getSourceCodeUrl(project.link);
+            const projectDataAttr = this.escapeHtml(JSON.stringify(project));
 
             return `
                 <div class="card" data-category="${this.escapeHtml(project.category)}" onclick="window.location.href='${this.escapeHtml(project.link)}'; event.stopPropagation();">
                     <div class="card-actions">
+                        <button class="preview-btn" 
+                                data-project='${projectDataAttr}'
+                                onclick="event.preventDefault(); event.stopPropagation(); window.openSandboxPreview(this);"
+                                title="Quick Preview">
+                            <i class="ri-play-circle-line"></i>
+                        </button>
                         <button class="bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" 
                                 data-project-title="${this.escapeHtml(project.title)}" 
                                 onclick="event.preventDefault(); event.stopPropagation(); window.toggleProjectBookmark(this, '${this.escapeHtml(project.title)}', '${this.escapeHtml(project.link)}', '${this.escapeHtml(project.category)}', '${this.escapeHtml(project.description || '')}');"
@@ -318,6 +325,7 @@ class ProjectManager {
             const isBookmarked = window.bookmarksManager?.isBookmarked(project.title);
             const coverStyle = project.coverStyle || '';
             const coverClass = project.coverClass || '';
+            const projectDataAttr = this.escapeHtml(JSON.stringify(project));
 
             return `
                 <div class="list-card">
@@ -332,6 +340,12 @@ class ProjectManager {
                         <p class="list-card-description">${this.escapeHtml(project.description || '')}</p>
                     </div>
                     <div class="list-card-actions">
+                        <button class="preview-btn" 
+                                data-project='${projectDataAttr}'
+                                onclick="event.stopPropagation(); window.openSandboxPreview(this);"
+                                title="Quick Preview">
+                            <i class="ri-play-circle-line"></i>
+                        </button>
                         <button class="bookmark-btn ${isBookmarked ? 'bookmarked' : ''}"
                                 onclick="window.toggleProjectBookmark(this, '${this.escapeHtml(project.title)}', '${this.escapeHtml(project.link)}', '${this.escapeHtml(project.category)}', '${this.escapeHtml(project.description || '')}');"
                                 title="${isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}">
@@ -471,6 +485,27 @@ function showToast(message) {
         setTimeout(() => toast.remove(), 300);
     }, 2000);
 }
+
+/**
+ * Global Sandbox Preview Handler
+ * Feature #1334: Project Playground Sandbox & Live Preview
+ */
+window.openSandboxPreview = function(btn) {
+    if (!window.sandboxEngine) {
+        console.warn('Sandbox engine not loaded');
+        return;
+    }
+    
+    try {
+        const projectData = btn.dataset.project;
+        if (projectData) {
+            const project = JSON.parse(projectData);
+            window.sandboxEngine.open(project);
+        }
+    } catch (e) {
+        console.error('Failed to open sandbox preview:', e);
+    }
+};
 
 // ===============================
 // Global Initialization
