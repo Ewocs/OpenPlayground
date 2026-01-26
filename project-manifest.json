@@ -14,6 +14,17 @@
       "link": "./projects/2048-puzzle/index.html"
     },
     {
+      "folder": "Organic Noise Generated UI",
+      "path": "./projects/Noise-Generated/project.json",
+      "link": "./projects/Noise-Generated/index.html"
+    },
+    {
+      "folder": "Attention Garden",
+      "path": "./projects/AttentionGarden/project.json",
+      "link": "./projects/AttentionGarden/index.html"
+      "folder": "MinimalSurvival",
+      "path": "./projects/MinimalSurvival/project.json",
+      "link": "./projects/MinimalSurvival/index.html"
       "folder": "2dshooter",
       "path": "./projects/2dshooter/project.json",
       "link": "./projects/2dshooter/index.html"
