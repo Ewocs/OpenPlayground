@@ -1914,6 +1914,11 @@
       "link": "./projects/randomData/index.html"
     },
     {
+      "folder": "baseEncoder",
+      "path": "./projects/baseEncoder/project.json",
+      "link": "./projects/baseEncoder/index.html"
+    },
+    {
       "folder": "Whack a Box",
       "path": "./projects/Whack a Box/project.json",
       "link": "./projects/Whack a Box/index.html"
