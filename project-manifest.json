@@ -1924,6 +1924,11 @@
       "link": "./projects/JSON-Table/index.html"
     },
     {
+      "folder": "CSV-Cleaner",
+      "path": "./projects/CSV-Cleaner/project.json",
+      "link": "./projects/CSV-Cleaner/index.html"
+    },
+    {
       "folder": "baseEncoder",
       "path": "./projects/baseEncoder/project.json",
       "link": "./projects/baseEncoder/index.html"
