@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contributor Dashboard - OpenPlayground</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/contributor-dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/contributor-dashboard.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <a href="index.html" class="logo">OpenPlayground</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="stats.html">Stats</a></li>
+                    <li><a href="contributor-dashboard.html" class="active">Dashboard</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Contributor Dashboard</h1>
+                <p>Track your skills, growth, and find suitable issues to work on</p>
+            </div>
+        </section>
+
+        <section class="dashboard">
+            <div class="container">
+                <div class="dashboard-grid">
+                    <div class="skill-profile">
+                        <h2>Skill Profile</h2>
+                        <div id="skill-radar"></div>
+                        <div id="skill-list"></div>
+                    </div>
+
+                    <div class="growth-chart">
+                        <h2>Growth Over Time</h2>
+                        <canvas id="growthChart"></canvas>
+                    </div>
+
+                    <div class="recommendations">
+                        <h2>Recommended Issues</h2>
+                        <div id="skill-issues"></div>
+                        <div id="beginner-issues"></div>
+                    </div>
+
+                    <div class="stats">
+                        <h2>Contribution Stats</h2>
+                        <div id="stats-cards"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 OpenPlayground. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
